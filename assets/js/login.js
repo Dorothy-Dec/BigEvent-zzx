@@ -14,7 +14,7 @@ $(function () {
   let form = layui.form
   let layer = layui.layer
 
-  // 自定义校验规则
+  // 自定义校验规则---layui方法，用就行
   form.verify({
     // 密码校验
     pwd: [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格'],
@@ -31,6 +31,7 @@ $(function () {
   $('#form-reg').on('submit', function (e) {
     e.preventDefault()
     let data = {
+      // 属性选择器
       username: $('#form-reg [name=username]').val(),
       password: $('#form-reg [name=password]').val()
     }
@@ -50,13 +51,14 @@ $(function () {
     $.ajax({
       url:'/api/login',
       method:'POST',
-      data: $(this).serialize(),
+      data: $(this).serialize(),  //获取当前表单（登录界面的用户名和密码）的所有数据
       success:function(res){
         if(res.status !== 0){
           return layer.msg('登录失败');
         }
         layer.msg('登录成功')
         // 将登录成功的token字符串，保存到localStorage中
+        // ---只要成功登录了，就会生成一个token，把它先保存到本地存储，方便后面进行身份认证的判断
         localStorage.setItem('token',res.token)
         // 跳转到后台主页
         location.href = '/code/index.html'
