@@ -18,15 +18,17 @@ $(function () {
 
   // 上传
   $('#btnChooseImage').on('click', function () {
+    // 上传按钮不能实现文件上传，前面写一个文件上传表单元素，隐藏起来，
+    // 点击按钮的时候调用文件上传表单的点击事件（自带点击事件）
     $('#file').click()
   })
 
   // 选择文件--为文件选择框绑定 change 事件
   $('#file').on('change', function (e) {
-     // 获取用户选择的文件
+    // 获取用户选择的文件
     let filelist = e.target.files
     if (filelist.length === 0) {
-    return  layer.msg('请选择照片')
+      return layer.msg('请选择照片')
     }
     // 1. 拿到用户选择的文件
     let file = filelist[0]
@@ -43,9 +45,9 @@ $(function () {
 
 
   // 确定上传--为确定按钮绑定上传事件
-  $('#btnUpload').on('click',function(){
+  $('#btnUpload').on('click', function () {
 
-    // 拿到用户裁剪之后的头像 ---z转成base64字符串:dataURL是个数据
+    // 拿到用户裁剪之后的头像 ---转成 base64 字符串:dataURL是个数据
     let dataURL = $image.cropper('getCroppedCanvas', {
       // 创建一个 Canvas 画布
       width: 100,
@@ -54,18 +56,17 @@ $(function () {
 
     // 调接口，把头像上传到服务器
     $.ajax({
-      method:'POST',
-      url:'/my/update/avatar',
-      data:{
-        avatar:dataURL
+      method: 'POST',
+      url: '/my/update/avatar',
+      data: {
+        avatar: dataURL
       },
-      success:function(res){
-        if(res.status !== 0){
+      success: function (res) {
+        if (res.status !== 0) {
           return layer.msg('更新头像失败')
         }
         layer.msg('更新头像成功！')
         window.parent.getUserInfo()
-        console.log(1111);
       }
     })
 
